@@ -1,0 +1,25 @@
+def mk_class(first: str, second: str, third: str) -> str:
+    """
+    Costruisce una stringa unendo l'iniziale del primo parametro, il secondo parametro 
+    depurato dai caratteri non alfabetici, e l'iniziale del terzo parametro.
+
+    >>> mk_class('Mattia', 's/he makes difficult exercises!', 'Professor')
+    'm-shemakesdifficultexercises-p'
+    >>> mk_class('Python', '123-ABC', 'Rules')
+    'p-abc-r'
+    """
+    # 1. Prendiamo le iniziali e le rendiamo minuscole
+    part1 = first[0].lower()
+    part3 = third[0].lower()
+    
+    # 2. Rimuoviamo i caratteri non alfabetici dal secondo parametro
+    # Usiamo isalpha() per filtrare solo le lettere
+    part2 = "".join([char for char in second if char.isalpha()]).lower()
+    
+    # 3. Uniamo le parti con il trattino
+    return f"{part1}-{part2}-{part3}"
+
+# Esecuzione del doctest
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
