@@ -1,0 +1,28 @@
+import numpy as np
+
+# 1. Utilizziamo np.vectorize per applicare mk_class in modo efficiente alle colonne del dataframe
+# Questo evita l'uso di loop for espliciti
+v_mk_class = np.vectorize(mk_class)
+
+# 2. Calcoliamo la classe attesa basandoci sulle tre colonne specificate
+# Nota: convertiamo i valori in stringa per sicurezza prima di passarli alla funzione
+expected_classes = v_mk_class(
+    df['Genotype'].astype(str), 
+    df['Behavior'].astype(str), 
+    df['Treatment'].astype(str)
+)
+
+# 3. Verifichiamo se la colonna 'class' originale è uguale a quella calcolata
+# Il metodo .all() restituisce True solo se la condizione è vera per OGNI riga
+is_correct = (df['class'] == expected_classes).all()
+
+if is_correct:
+    print("La colonna 'class' è corretta per tutte le righe del dataframe.")
+else:
+    # Se ci fossero discrepanze, possiamo contare quante sono
+    mismatches = (df['class'] != expected_classes).sum()
+    print(f"Attenzione: ci sono {mismatches} righe in cui la classe non corrisponde.")
+
+# 4. Visualizzazione di controllo (opzionale)
+# df['computed_class'] = expected_classes
+# print(df[['Genotype', 'Behavior', 'Treatment', 'class', 'computed_class']].head())
