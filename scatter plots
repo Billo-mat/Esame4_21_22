@@ -1,0 +1,32 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 1. Funzione di standardizzazione (z-score)
+def standardize(series):
+    return (series - series.mean()) / series.std()
+
+# 2. Creazione delle versioni standardizzate delle colonne
+# Assumiamo che df sia il dataframe caricato precedentemente
+df['Bcatenin_N_std'] = standardize(df['Bcatenin_N'])
+df['Tau_N_std'] = standardize(df['Tau_N'])
+
+# 3. Creazione degli scatterplot per ogni classe
+# Otteniamo l'elenco delle classi uniche
+classes = df['class'].unique()
+
+# Definiamo la struttura dei grafici (es. griglia 4x2 se ci sono 8 classi)
+fig, axes = plt.subplots(nrows=4, ncols=2, figsize=(12, 18))
+axes = axes.flatten()
+
+for i, cls in enumerate(classes):
+    subset = df[df['class'] == cls]
+    axes[i].scatter(subset['Bcatenin_N_std'], subset['Tau_N_std'], alpha=0.5, s=10)
+    axes[i].set_title(f'Class: {cls}')
+    axes[i].set_xlabel('Bcatenin_N (std)')
+    axes[i].set_ylabel('Tau_N (std)')
+    # Fissiamo i limiti degli assi per rendere i grafici confrontabili
+    axes[i].set_xlim(-3, 3)
+    axes[i].set_ylim(-3, 3)
+
+plt.tight_layout()
+plt.show()
